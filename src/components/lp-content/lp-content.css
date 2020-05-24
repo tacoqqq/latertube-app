@@ -1,0 +1,42 @@
+
+.lp-main-header {
+  padding: 50px 20px;
+  min-height: 80vh;
+}
+
+.lp-content-section  h3 {
+  padding: 20px;
+}
+
+.lp-content-section  {
+  min-height: 60vh;
+  padding: 1em 0.5em;
+  font-size: 18px;
+}
+
+.lp-content-section  p {
+  padding: 10px 35px;
+}
+
+
+.lp-content-section:nth-child(even) {
+  background-color: lightgrey;
+}
+
+
+button {
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: grey;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

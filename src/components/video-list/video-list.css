@@ -1,0 +1,14 @@
+.video-list-wrapper {
+    width: 80%;
+    margin: 0 auto;
+}
+
+
+@media only screen and (min-width: 768px) {
+    .video-list-wrapper {
+        display: flex;
+        flex-flow: row wrap;
+        margin: 0 auto;
+        align-items: stretch;
+    }
+}

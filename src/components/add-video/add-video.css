@@ -1,0 +1,65 @@
+.add-video-header-container {
+    padding: 40px 10px;
+  }
+  
+.add-video-title {
+    padding: 20px 30px;
+}
+  
+.add-video-form-container {
+    padding: 0px 15px;
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+.add-video-form {
+    max-width: 500px;
+    border-radius: 5px;
+    background-color: lightgrey;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  
+.add-video-button-group button {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    margin: 50px 10px 0px 10px;
+  }
+  
+.add-video-button-group button:hover {
+    cursor: pointer;
+    background-color: grey;
+    color: white;
+  }
+  
+label {
+    display: block;
+    width: 100%;
+    padding: 10px;
+  }
+  
+input, textarea, select {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    margin: 1% auto;
+    font-size: 16px;
+    padding: 5px;
+  }
+  
+  
+  textarea {
+    height: 10rem;
+    resize: none;
+  }
+
+
+  .require-label {
+    color: red;
+  }
+
+  .error-message {
+    color: red;
+    text-align: left;
+  }
