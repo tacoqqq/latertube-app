@@ -3,7 +3,7 @@ import './add-genre.css';
 import { uuid } from 'uuidv4';
 import { withRouter } from 'react-router-dom';
 import { LatertubeContext } from '../../latertube-context';
-
+import actions from '../actions/actions';
 
 class AddGenre extends Component {
     constructor(props){
@@ -36,6 +36,14 @@ class AddGenre extends Component {
 
     handleCancle = () => {
         this.props.history.push('/home')
+    }
+
+    componentDidMount(){
+        document.addEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
     }
 
     render(){

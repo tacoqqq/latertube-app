@@ -46,6 +46,16 @@ class Header extends Component {
                         </ul>
                     </nav>
                 }} />
+                <Route exact path="/:videoId/edit" render={props => {
+                    return <nav role="navigation">
+                        <div className="nav-title"><NavLink to="/">LaterTube</NavLink></div>
+                        <ul className="nav-menu">
+                            <li className="nav-menu-item"><NavLink to="/home">Home</NavLink></li>
+                            <li className="nav-menu-item"><NavLink to="/add-genre">+ Genre</NavLink></li>
+                            <li className="nav-menu-item"><NavLink to="/add-video">+ Video</NavLink></li>
+                        </ul>
+                    </nav>
+                }} />
             </Switch>
           </div>
         )

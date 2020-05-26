@@ -8,7 +8,8 @@ class VideoList extends Component {
     static contextType = LatertubeContext
 
     render(){
-        const videos = this.context.videos.map((video,i) => <Video {...video} key={i} />)
+
+        const videos = this.props.videos.map((video,i) => <Video {...video} key={i} />)
         return(
             <section className="video-list-wrapper">
                 {videos}

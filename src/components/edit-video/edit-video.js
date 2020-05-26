@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import './add-video.css'
-import { uuid } from 'uuidv4';
-import { withRouter } from 'react-router-dom';
+import './edit-video.css';
 import { LatertubeContext } from '../../latertube-context';
 import actions from '../actions/actions';
 
-class AddVideo extends Component {
+
+class EditVideo extends Component {
     constructor(props){
         super(props)
         this.state = {
             videoTitle: '',
             videoUrl: '',
             videoDescription: '',
-            videoRating: 1,
-            videoGenreId: 'Select a genre..',
+            videoRating: '',
+            videoGenre: '',
             videoGenreErrorMessage: null,
         }
     }
@@ -22,6 +21,7 @@ class AddVideo extends Component {
 
     //Handle Title Change
     handleTitleChange = (event) => {
+        console.log('hello from title change')
         const newTitle = event.target.value
         this.setState({
             videoTitle: newTitle
@@ -54,34 +54,36 @@ class AddVideo extends Component {
 
     //Handle Genre Change
     handleGenreChange = (event) => {
-        this.setState({
-            videoGenreErrorMessage: ''
-        })
         const newGenre = event.target.value
+        console.log(newGenre)
         const newGenreFound = this.context.genres.find(genre => genre.genre_title === newGenre) 
 
         if (!newGenreFound) {
-            this.setState({
+            return this.setState({
+                videoGenre: "Select a genre..",
                 videoGenreErrorMessage: "Must select a genre!"
             })
         }
 
         this.setState({
-            videoGenreId: newGenreFound.genre_id
+            videoGenreErrorMessage: "",
+            videoGenre: newGenreFound.genre_title
         })
 
     }
 
     //Handle Form Submission
-    handleSubmit = (e) => {
+    handleUpdate = (e) => {
         e.preventDefault()
 
         //handle verification
         if (!this.state.videoTitle || !this.state.videoUrl || !this.state.videoRating) {
-            return "Please fill out requiredd fields!"
+            return this.setState({
+                videoGenreErrorMessage: "Please fill out required fields!"
+            })
         }
 
-        if (this.state.videoGenreId === 'Select a genre..'){
+        if (this.state.videoGenre === 'Select a genre..'){
             return this.setState({
                 videoGenreErrorMessage: "Must select a genre!"
             })
@@ -89,17 +91,17 @@ class AddVideo extends Component {
 
         const youtubeId = this.state.videoUrl.split('v=')[1]
 
-        const newVideo = {
-            video_id: uuid(),
+        const updatedVideoInfo = {
+            video_id: this.context.videos.find(video => Number(this.props.match.params.videoId) === video.video_id).video_id,
             video_title: this.state.videoTitle,
             video_thumbnail_url: `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
             video_url: this.state.videoUrl,
             video_description: this.state.videoDescription,
             video_rating: this.state.videoRating,
-            genre_id: this.state.videoGenreId,
+            genre_id: this.context.genres.find(genre => genre.genre_title.toLowerCase() === this.state.videoGenre.toLowerCase()).genre_id,
             video_created_time: new Date().toLocaleString()
         }
-        this.context.addNewVideo(newVideo)
+        this.context.updateVideo(updatedVideoInfo)
         this.props.history.push('/home')
     }
 
@@ -108,9 +110,23 @@ class AddVideo extends Component {
         this.props.history.push('/home')
     }
 
+    handleDelete = () => {
+        console.log('delete')
+        this.context.deleteVideo(this.context.videos.find(video => Number(this.props.match.params.videoId) === video.video_id).video_id)
+        this.props.history.push('/home')
+    }
 
     componentDidMount(){
         document.addEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
+        const video = this.context.videos.find(video => Number(this.props.match.params.videoId) === video.video_id)
+        this.setState({
+            videoTitle: video.video_title,
+            videoUrl: video.video_url,
+            videoDescription: video.video_description,
+            videoRating: Number(video.video_rating),
+            videoGenre: this.context.genres.find(genre => Number(genre.genre_id) === video.genre_id).genre_title,
+            videoGenreErrorMessage: null,
+        })
     }
 
     componentWillUnmount(){
@@ -119,56 +135,56 @@ class AddVideo extends Component {
 
 
     render(){
-
-        const genreOptions = this.context.genres.map((genre,i) => <option key={i}>{genre.genre_title}</option>)
-
+        const genreOptions = this.context.genres.map((genre,i) => <option value={genre.genre_title} key={i}>{genre.genre_title}</option>)
         return(
-            <div className="add-video-wrapper">
-                    <header className="add-video-header-container">
-                        <h1 className="add-video-title">Add New Video</h1>
+            <div className="edit-video-wrapper">
+                    <header className="edit-video-header-container">
+                        <h1 className="edit-video-title">Edit Video</h1>
                     </header>
-                    <section className="add-video-form-container">
-                        <form className="add-video-form" onSubmit={ e => this.handleSubmit(e)}>
+                    <section className="edit-video-form-container">
+                        <form className="edit-video-form" onSubmit={ e => this.handleUpdate(e)}>
                             <div>
                                 <label className="name-video-title-label" htmlFor="video-title">Video Title</label>
-                                <input className="name-video-title-input" id="video-title" type="text" required placeholder="Matcha Cheesecake Tutorial" onChange={ (e) => this.handleTitleChange(e)}></input>
+                                <input className="name-video-title-input" id="video-title" type="text" defaultValue={this.state.videoTitle} onChange={ (e) => this.handleTitleChange(e)}></input>
                             </div>
                             <div>
                                 <label className="name-video-url-label" htmlFor="video-url">Video Url</label>
-                                <input className="name-video-url-input" samesite="none" id="video-url" type="text" required placeholder="https://www.youtube.com/watch?v=NRlYiTPPo7A" onChange={ (e) => this.handleUrlChange(e)}></input>
+                                <input className="name-video-url-input" samesite="none" id="video-url" type="text" defaultValue={this.state.videoUrl} onChange={ (e) => this.handleUrlChange(e)}></input>
                             </div>
                             <div>
                                 <label className="name-video-description-label" htmlFor="video-description">Video Description</label>
-                                <textarea className="name-video-description-input" id="video-description" placeholder="This recipe has more than 33k views. One of the most popular matcha basque cheesecake recipe videos on Youtube." onChange={ (e) => this.handleDescriptionChange(e)}></textarea>
+                                <textarea className="name-video-description-input" id="video-description" defaultValue={this.state.videoDescription} onChange={ (e) => this.handleDescriptionChange(e)}></textarea>
                             </div>
                             <div>
                                 <label htmlFor="video-rating">Video Rating (Scale 1-5)</label>
-                                <select defaultValue={1} id="video-rating" onChange={ (e) => this.handleRatingChange(e)} >
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                <select value={this.state.videoRating} id="video-rating" onChange={ (e) => this.handleRatingChange(e)} >
+                                    <option value={1}>1</option>
+                                    <option value={2}>2</option>
+                                    <option value={3}>3</option>
+                                    <option value={4}>4</option>
+                                    <option value={5}>5</option>
                                 </select>
                             </div>
                             <div>
                                 <label htmlFor="video-genre">Genre</label>
-                                <select required id="video-genre" onChange={ (e) => this.handleGenreChange(e)}>
+                                <select value={this.state.videoGenre} id="video-genre" onChange={ (e) => this.handleGenreChange(e)}>
                                     <option>Select a genre..</option>
                                     {genreOptions}
                                 </select>
                             </div>
                             <div className="error-message">{this.state.videoGenreErrorMessage ? this.state.videoGenreErrorMessage : ''}</div>
-                            <div className="add-video-button-group">
+                            <div className="edit-video-button-group">
                                 <button type="button" onClick={this.handleCancle}>Cancel</button>
-                                <button type="submit">Create</button>
+                                <button type="submit">Update</button>
+                            </div>
+                            <div className="delete-video">
+                                I want to <span className="delete-video-text" onClick={this.handleDelete}>delete</span> this video.
                             </div>
                         </form>
                     </section>
             </div>    
         )
     }
-
 }
 
-export default withRouter(AddVideo)
+export default EditVideo;

@@ -4,6 +4,9 @@ export const LatertubeContext = React.createContext({
     genres: [],
     videos: [],
     addNewGenre: () => {},
-    addNewVideo: () => {}
+    addNewVideo: () => {},
+    filterVideoByTitle: () => {},
+    updateVideo: () => {},
+    deleteVideo: () => {}
 })
 

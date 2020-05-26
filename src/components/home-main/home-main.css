@@ -1,3 +1,9 @@
 .home-wrapper {
     padding: 1%;
 }
+
+
+.filter-wrapper {
+    width: 80%;
+    margin: 0 auto;
+}

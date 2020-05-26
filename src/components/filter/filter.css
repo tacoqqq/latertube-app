@@ -1,0 +1,16 @@
+.video-count {
+    color: red;
+    font-weight: 800;
+}
+
+.filter-condition {
+    padding: 0.1em;
+}
+
+input, label, select {
+    padding: 10px;
+}
+
+select {
+    height: 30px;
+}

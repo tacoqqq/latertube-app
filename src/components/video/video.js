@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './video.css';
 import { LatertubeContext } from '../../latertube-context';
+import Rating from '../rating/rating';
+import { Link } from 'react-router-dom';
 
 class Video extends Component {
 
@@ -8,7 +10,6 @@ class Video extends Component {
 
     render(){
         const genrename = this.context.genres.find(genre => genre.genre_id === this.props.genre_id).genre_title
-
         return(
             <div className="video-container">
                 <div className="video-card">
@@ -21,12 +22,11 @@ class Video extends Component {
                     <div className="video-card-info-conatiner">
                         <div className="video-genre">Video Genre: {genrename}</div>
                         <div className="video-card-info-second-row">
-                            <div className="rating">{this.props.video_rating}<span role="img" aria-label="thumbs-up">👍</span></div>
-                            <ul className="video-card-info-functions">
-                                <li><a href={this.props.video_url} target="_blank" rel="noopener noreferrer">Watch Now</a></li>
-                                <li><a href="/home">Edit</a></li>
-                                <li><a href="/home">Delete</a></li>
-                            </ul>
+                            <Rating score={this.props.video_rating}/>
+                            <div className="video-card-info-functions">
+                                <a href={this.props.video_url} target="_blank" rel="noopener noreferrer">Watch Now</a>
+                                <Link to={`/${this.props.video_id}/edit`}>Edit</Link>
+                            </div>
                         </div>
                         <div className="video-card-info-container-expand">
                             <div className="description">

@@ -1,18 +1,18 @@
-.add-video-header-container {
+.edit-video-header-container {
     padding: 20px 10px;
   }
   
-.add-video-title {
+.edit-video-title {
     padding: 20px 30px;
 }
   
-.add-video-form-container {
+.edit-video-form-container {
     padding: 0px 15px;
-    width: 85%;
     margin: 20px auto;
+    width: 85%;
   }
   
-.add-video-form {
+.edit-video-form {
     max-width: 800px;
     border-radius: 5px;
     background-color: lightgrey;
@@ -20,14 +20,14 @@
     padding: 30px;
   }
   
-.add-video-button-group button {
+.edit-video-button-group button {
     padding: 10px;
     border-radius: 5px;
     font-size: 18px;
     margin: 50px 10px 0px 10px;
   }
   
-.add-video-button-group button:hover {
+.edit-video-button-group button:hover {
     cursor: pointer;
     background-color: grey;
     color: white;
@@ -62,4 +62,27 @@ input, textarea, select {
   .error-message {
     color: red;
     text-align: left;
+  }
+
+  .video-title-highlight {
+    background-color: lightgrey;
+    padding: 0.4em;
+    border-radius: 5px;
+    font-size: 22px;
+    position: relative;
+    bottom: 5px;
+  }
+
+  .delete-video {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .delete-video-text {
+    color: red;
+    text-decoration: underline;
+  }
+
+  .delete-video-text:hover {
+    cursor: pointer;
   }

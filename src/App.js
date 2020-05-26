@@ -5,6 +5,7 @@ import LandingPage from '../src/routes/landing-page-route';
 import HomeMain from './components/home-main/home-main';
 import AddGenre from './components/add-genre/add-genre';
 import AddVideo from './components/add-video/add-video';
+import EditVideo from './components/edit-video/edit-video';
 import { LatertubeContext } from './latertube-context';
 import { STORE } from './store';
 
@@ -13,7 +14,7 @@ class App extends Component {
     super(props)
     this.state = {
       genres: STORE.GENRES,
-      videos: STORE.VIDEOS
+      videos: STORE.VIDEOS,
     }
   }
 
@@ -37,6 +38,30 @@ class App extends Component {
     })
   }
 
+  //Update Video
+  handleUpdateVideo = (updateInfo) => {
+    console.log(updateInfo.video_id)
+    const updatedVideos = this.state.videos.map(video => {
+        if (Number(video.video_id) === Number(updateInfo.video_id)) {
+          return updateInfo
+        } else {
+          return video
+        }
+      }
+    )
+    this.setState({
+      videos: updatedVideos
+    })
+  }
+
+
+  handleDeleteVideo = (videoId) => {
+    console.log('deleted from app.js')
+    const updatedVideos = this.state.videos.filter(video => Number(video.video_id) !== Number(videoId))
+    this.setState({
+      videos: updatedVideos
+    })
+  }
 
   render(){
     return(
@@ -46,7 +71,9 @@ class App extends Component {
             genres: this.state.genres,
             videos: this.state.videos,
             addNewGenre: this.handleAddNewGenre,
-            addNewVideo: this.handleAddNewVideo
+            addNewVideo: this.handleAddNewVideo,
+            updateVideo: this.handleUpdateVideo,
+            deleteVideo: this.handleDeleteVideo
           }
         }
         >
@@ -57,6 +84,7 @@ class App extends Component {
                 <Route path="/home" component={HomeMain} />
                 <Route path="/add-genre" component={AddGenre} />
                 <Route path="/add-video" component={AddVideo} />
+                <Route path="/:videoId/edit" component={EditVideo} />
             </Switch>
           </main>
         </LatertubeContext.Provider>

@@ -60,22 +60,22 @@
     margin: 0.5em 0;
   }
 
-  ul.video-card-info-functions {
+  div.video-card-info-functions {
     margin: 0 5px;
     display: flex;
     font-size: 14px;
   }
 
-  ul.video-card-info-functions li {
-    list-style: none;
-    font-size: 14px;
-    padding: 0 0.5em;
-  }
-
-  ul.video-card-info-functions > li > a {
+  div.video-card-info-functions > a {
       text-decoration: underline;
+      font-size: 14px;
+      padding: 0 0.5em;
   }
 
+  div.video-card-info-functions > a:hover {
+    background-color: #282828;
+    color: white;
+} 
 
 @media only screen and (min-width: 768px){
     .video-container {
