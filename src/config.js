@@ -1,3 +1,3 @@
 export default {
-    API_ENDPOINT: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api'
+    API_ENDPOINT: "https://quiet-scrubland-74517.herokuapp.com/api"
 }
