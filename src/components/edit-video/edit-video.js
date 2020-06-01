@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './edit-video.css';
 import { LatertubeContext } from '../../latertube-context';
 import actions from '../actions/actions';
+import config from '../../config';
 
 
 class EditVideo extends Component {
@@ -21,7 +22,6 @@ class EditVideo extends Component {
 
     //Handle Title Change
     handleTitleChange = (event) => {
-        console.log('hello from title change')
         const newTitle = event.target.value
         this.setState({
             videoTitle: newTitle
@@ -55,7 +55,6 @@ class EditVideo extends Component {
     //Handle Genre Change
     handleGenreChange = (event) => {
         const newGenre = event.target.value
-        console.log(newGenre)
         const newGenreFound = this.context.genres.find(genre => genre.genre_title === newGenre) 
 
         if (!newGenreFound) {
@@ -63,13 +62,12 @@ class EditVideo extends Component {
                 videoGenre: "Select a genre..",
                 videoGenreErrorMessage: "Must select a genre!"
             })
+        } else {
+            this.setState({
+                videoGenreErrorMessage: "",
+                videoGenre: newGenreFound.genre_title
+            })
         }
-
-        this.setState({
-            videoGenreErrorMessage: "",
-            videoGenre: newGenreFound.genre_title
-        })
-
     }
 
     //Handle Form Submission
@@ -89,20 +87,39 @@ class EditVideo extends Component {
             })
         }
 
-        const youtubeId = this.state.videoUrl.split('v=')[1]
-
         const updatedVideoInfo = {
-            video_id: this.context.videos.find(video => Number(this.props.match.params.videoId) === video.video_id).video_id,
+            video_id: this.props.match.params.videoId,
             video_title: this.state.videoTitle,
-            video_thumbnail_url: `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
             video_url: this.state.videoUrl,
             video_description: this.state.videoDescription,
             video_rating: this.state.videoRating,
             genre_id: this.context.genres.find(genre => genre.genre_title.toLowerCase() === this.state.videoGenre.toLowerCase()).genre_id,
             video_created_time: new Date().toLocaleString()
         }
-        this.context.updateVideo(updatedVideoInfo)
-        this.props.history.push('/home')
+
+        fetch(`${config.API_ENDPOINT}/videos/${this.props.match.params.videoId}`, {
+            method: 'PATCH',
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(updatedVideoInfo)
+        })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(response.error)
+                }
+                return response.json()
+            })
+            .then(responseJSON => {
+                console.log(responseJSON)
+                this.context.updateVideo(responseJSON)
+                this.props.history.goBack()
+            })
+            .catch(err => {
+                this.setState({
+                    videoGenreErrorMessage: err.message
+                })
+            })
     }
 
     //Handle Form Cancellation
@@ -111,22 +128,51 @@ class EditVideo extends Component {
     }
 
     handleDelete = () => {
-        console.log('delete')
-        this.context.deleteVideo(this.context.videos.find(video => Number(this.props.match.params.videoId) === video.video_id).video_id)
-        this.props.history.push('/home')
+        fetch(`${config.API_ENDPOINT}/videos/${this.props.match.params.videoId}`, {
+            method: 'DELETE',
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok){
+                throw new Error(response.error)
+            }
+        })
+        .then(responseJSON => {
+            this.context.deleteVideo(this.props.match.params.videoId)
+            this.props.history.push('/home')
+        })
     }
+
 
     componentDidMount(){
         document.addEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
-        const video = this.context.videos.find(video => Number(this.props.match.params.videoId) === video.video_id)
-        this.setState({
-            videoTitle: video.video_title,
-            videoUrl: video.video_url,
-            videoDescription: video.video_description,
-            videoRating: Number(video.video_rating),
-            videoGenre: this.context.genres.find(genre => Number(genre.genre_id) === video.genre_id).genre_title,
-            videoGenreErrorMessage: null,
-        })
+        console.log('component did mount')
+        fetch(`${config.API_ENDPOINT}/videos/${this.props.match.params.videoId}`)
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(response.error)
+                }
+                return response.json()
+            })
+            .then(responseJSON => {
+                console.log('fetched dasa from API')
+                console.log(responseJSON)
+                this.setState({
+                    videoTitle: responseJSON.video_title,
+                    videoUrl: responseJSON.video_url,
+                    videoDescription: responseJSON.video_description,
+                    videoRating: Number(responseJSON.video_rating),
+                    videoGenre: this.context.genres.find(genre => Number(genre.genre_id) === responseJSON.genre_id).genre_title,
+                    videoGenreErrorMessage: null,
+                })
+            })
+            .catch(err => {
+                this.setState({
+                    videoGenreErrorMessage: err.message
+                })
+            })
     }
 
     componentWillUnmount(){
@@ -135,7 +181,11 @@ class EditVideo extends Component {
 
 
     render(){
-        const genreOptions = this.context.genres.map((genre,i) => <option value={genre.genre_title} key={i}>{genre.genre_title}</option>)
+        console.log('component render')
+        console.log(this.context.genres)
+        const genreOptions = this.context.genres.length > 0 
+            ? this.context.genres.map((genre,i) => <option value={genre.genre_title} key={i}>{genre.genre_title}</option>)
+            : ''
         return(
             <div className="edit-video-wrapper">
                     <header className="edit-video-header-container">

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './add-genre.css';
-import { uuid } from 'uuidv4';
 import { withRouter } from 'react-router-dom';
 import { LatertubeContext } from '../../latertube-context';
 import actions from '../actions/actions';
+import config from '../../config';
 
 class AddGenre extends Component {
     constructor(props){
@@ -18,12 +18,29 @@ class AddGenre extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
         const newGenre = {
-            genre_id: uuid(),
             genre_title: this.state.videoGenre,
-            genre_created_time: new Date().toLocaleString()
         }
-        this.context.addNewGenre(newGenre)
-        this.props.history.push('/home')
+
+        fetch(`${config.API_ENDPOINT}/genres`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newGenre) 
+        })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(response.error)
+                }
+                return response.json()
+            })
+            .then(responseJSON => {
+                this.context.addNewGenre(responseJSON)
+                this.props.history.push('/home')
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 
 

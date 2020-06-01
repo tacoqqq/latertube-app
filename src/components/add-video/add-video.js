@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './add-video.css'
-import { uuid } from 'uuidv4';
 import { withRouter } from 'react-router-dom';
 import { LatertubeContext } from '../../latertube-context';
 import actions from '../actions/actions';
+import config from '../../config';
 
 class AddVideo extends Component {
     constructor(props){
@@ -64,12 +64,11 @@ class AddVideo extends Component {
             this.setState({
                 videoGenreErrorMessage: "Must select a genre!"
             })
+        } else {
+            this.setState({
+                videoGenreId: newGenreFound.genre_id
+            })
         }
-
-        this.setState({
-            videoGenreId: newGenreFound.genre_id
-        })
-
     }
 
     //Handle Form Submission
@@ -87,20 +86,34 @@ class AddVideo extends Component {
             })
         }
 
-        const youtubeId = this.state.videoUrl.split('v=')[1]
-
         const newVideo = {
-            video_id: uuid(),
             video_title: this.state.videoTitle,
-            video_thumbnail_url: `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`,
             video_url: this.state.videoUrl,
             video_description: this.state.videoDescription,
             video_rating: this.state.videoRating,
             genre_id: this.state.videoGenreId,
-            video_created_time: new Date().toLocaleString()
         }
-        this.context.addNewVideo(newVideo)
-        this.props.history.push('/home')
+
+        fetch(`${config.API_ENDPOINT}/videos`, {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(newVideo)
+        })
+            .then(response => {
+                if (!response.ok){
+                    throw new Error(response.error)
+                }
+                return response.json()
+            })
+            .then(responseJSON => {
+                this.context.addNewVideo(responseJSON)
+                this.props.history.push('/home')
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
     }
 
     //Handle Form Cancellation

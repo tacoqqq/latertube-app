@@ -25,7 +25,7 @@ class Video extends Component {
                             <Rating score={this.props.video_rating}/>
                             <div className="video-card-info-functions">
                                 <a href={this.props.video_url} target="_blank" rel="noopener noreferrer">Watch Now</a>
-                                <Link to={`/${this.props.video_id}/edit`}>Edit</Link>
+                                <Link to={`/videos/${this.props.video_id}/edit`}>Edit</Link>
                             </div>
                         </div>
                         <div className="video-card-info-container-expand">
