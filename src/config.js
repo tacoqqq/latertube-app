@@ -1,6 +1,4 @@
 export default {
-    API_ENDPOINT: "http://localhost:8000/api"
+    API_ENDPOINT: "https://quiet-scrubland-74517.herokuapp.com/api"
 }
 
-
-//https://quiet-scrubland-74517.herokuapp.com/api
