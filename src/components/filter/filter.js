@@ -9,6 +9,7 @@ class Filter extends Component {
             filterTitle: "",
             filterRating: 1,
             filterGenre: null,
+            newOldSort: 1,
         }
     }
 
@@ -16,7 +17,8 @@ class Filter extends Component {
 
     //Submit changes for filtering
     handleSubmitChange = () => {
-        this.context.filterVideo(this.state.filterTitle, this.state.filterRating, this.state.filterGenre)
+        console.log(this.state.newOldSort)
+        this.context.filterVideo(this.state.filterTitle, this.state.filterRating, this.state.filterGenre, this.state.newOldSort)
     }
 
     //On Title Change
@@ -50,6 +52,14 @@ class Filter extends Component {
         }
     }
 
+    //On New Old Sorting Change
+    handleNewOldSort = (event) => {
+        const newOldSort = event.target.value
+        this.setState({
+            newOldSort: newOldSort
+        }, () => this.handleSubmitChange())
+    }
+
     render(){
         const genreOptions = this.context.genres.map((genre,i) => <option value={genre.genre_title} key={i}>{genre.genre_title}</option>)
         const videoCounts = this.context.videos.length
@@ -75,6 +85,13 @@ class Filter extends Component {
                         <select id="genre-filter" onChange={e => this.handleGenreChange(e)}>
                             <option value="all videos">All Videos</option>
                             {genreOptions}
+                        </select>
+                    </div>
+                    <div className="sort-condition">
+                        <label htmlFor="new-old-sort">Sort By</label>
+                        <select id="new-old-sort" onChange={e => this.handleNewOldSort(e)}>
+                            <option value={1}>From New to Old</option>
+                            <option value={2}>From Old to New</option>
                         </select>
                     </div>
                 </form>

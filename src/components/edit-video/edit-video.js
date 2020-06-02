@@ -14,6 +14,7 @@ class EditVideo extends Component {
             videoDescription: '',
             videoRating: '',
             videoGenre: '',
+            videoGenreArray: [],
             videoGenreErrorMessage: null,
         }
     }
@@ -149,6 +150,29 @@ class EditVideo extends Component {
     componentDidMount(){
         document.addEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
         console.log('component did mount')
+        let videoGenreArray;
+
+        if (this.context.genres.length === 0){
+            console.log('in this context')
+            fetch(`${config.API_ENDPOINT}/genres`)
+            .then(res => {
+              if (!res.ok){
+                throw new Error(res.error)
+              } 
+              return res.json()
+            })
+            .then(resJson => {
+                console.log(resJson)
+                videoGenreArray = resJson
+                return videoGenreArray
+            })
+            .catch(err => {
+                this.setState({
+                    videoGenreErrorMessage: err.message
+                })
+            })
+        }
+
         fetch(`${config.API_ENDPOINT}/videos/${this.props.match.params.videoId}`)
             .then(response => {
                 if (!response.ok){
@@ -164,7 +188,9 @@ class EditVideo extends Component {
                     videoUrl: responseJSON.video_url,
                     videoDescription: responseJSON.video_description,
                     videoRating: Number(responseJSON.video_rating),
-                    videoGenre: this.context.genres.find(genre => Number(genre.genre_id) === responseJSON.genre_id).genre_title,
+                    videoGenre: this.context.genres.length > 0 
+                        ? this.context.genres.find(genre => Number(genre.genre_id) === responseJSON.genre_id).genre_title 
+                        : videoGenreArray.find(genre => Number(genre.genre_id) === responseJSON.genre_id).genre_title,
                     videoGenreErrorMessage: null,
                 })
             })
@@ -182,10 +208,10 @@ class EditVideo extends Component {
 
     render(){
         console.log('component render')
-        console.log(this.context.genres)
-        const genreOptions = this.context.genres.length > 0 
+        const genreOptions = this.context.genres.length > 0
             ? this.context.genres.map((genre,i) => <option value={genre.genre_title} key={i}>{genre.genre_title}</option>)
             : ''
+        console.log(genreOptions)
         return(
             <div className="edit-video-wrapper">
                     <header className="edit-video-header-container">

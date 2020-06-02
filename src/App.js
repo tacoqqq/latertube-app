@@ -74,13 +74,22 @@ class App extends Component {
   }
 
   //Filter Video
-  handleFilterVideo = (keyword, rating, genreId) => {
-    const videosIncludeKeyword = this.state.videos.filter(video => video.video_title.toLowerCase().includes(keyword.toLowerCase()))
-    const videosMatchRating = videosIncludeKeyword.filter(video => Number(video.video_rating) >= Number(rating))
+  handleFilterVideo = (keyword, rating, genreId, newOldSort) => {
+    console.log('in handleFilterVideo')
+
+    const videosIncludeKeyword = keyword ? this.state.videos.filter(video => video.video_title.toLowerCase().includes(keyword.toLowerCase())) : this.state.videos
+    const videosMatchRating = rating ? videosIncludeKeyword.filter(video => Number(video.video_rating) >= Number(rating)) : videosIncludeKeyword
     const videosMatchGenre = genreId ? videosMatchRating.filter(video => video.genre_id === genreId ) : videosMatchRating
-    this.setState({
-      filteredVideos: videosMatchGenre
-    })
+    if (Number(newOldSort) === 1){
+      this.setState({
+        filteredVideos: videosMatchGenre
+      })
+    } else {
+      this.setState({
+        filteredVideos: videosMatchGenre.reverse()
+      })
+    }
+  
 }
 
   componentDidMount(){
