@@ -86,3 +86,14 @@ input, textarea, select {
   .delete-video-text:hover {
     cursor: pointer;
   }
+
+  .error-message {
+    color: red;
+    text-align: left;
+    max-width: 800px;
+    max-width: 500px;
+    margin: 1% auto;
+    font-size: 16px;
+    padding: 5px;
+  }
+

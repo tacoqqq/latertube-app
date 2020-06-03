@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './edit-video.css';
 import { LatertubeContext } from '../../latertube-context';
-import actions from '../actions/actions';
+import actions from '../../actions/actions';
 import config from '../../config';
 
 
@@ -16,6 +16,7 @@ class EditVideo extends Component {
             videoGenre: '',
             videoGenreArray: [],
             videoGenreErrorMessage: null,
+            videoUrlErrorMessage: null
         }
     }
 
@@ -31,10 +32,20 @@ class EditVideo extends Component {
 
     //Handle Url Change
     handleUrlChange = (event) => {
-        const newUrl = event.target.value
         this.setState({
-            videoUrl: newUrl
+            videoUrlErrorMessage: ''
         })
+        const newUrl = event.target.value
+
+        if (!(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/).test(newUrl)){
+            this.setState({
+                videoUrlErrorMessage: "Please provide a valid Youtube URL that matches the format of the example!"
+            })
+        } else {
+            this.setState({
+                videoUrl: newUrl
+            })
+        }
     }
 
     //Handle Description Change
@@ -112,7 +123,6 @@ class EditVideo extends Component {
                 return response.json()
             })
             .then(responseJSON => {
-                console.log(responseJSON)
                 this.context.updateVideo(responseJSON)
                 this.props.history.goBack()
             })
@@ -149,11 +159,11 @@ class EditVideo extends Component {
 
     componentDidMount(){
         document.addEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
-        console.log('component did mount')
+        window.scrollTo(0,0)
+
         let videoGenreArray;
 
         if (this.context.genres.length === 0){
-            console.log('in this context')
             fetch(`${config.API_ENDPOINT}/genres`)
             .then(res => {
               if (!res.ok){
@@ -162,7 +172,6 @@ class EditVideo extends Component {
               return res.json()
             })
             .then(resJson => {
-                console.log(resJson)
                 videoGenreArray = resJson
                 return videoGenreArray
             })
@@ -181,8 +190,6 @@ class EditVideo extends Component {
                 return response.json()
             })
             .then(responseJSON => {
-                console.log('fetched dasa from API')
-                console.log(responseJSON)
                 this.setState({
                     videoTitle: responseJSON.video_title,
                     videoUrl: responseJSON.video_url,
@@ -207,57 +214,56 @@ class EditVideo extends Component {
 
 
     render(){
-        console.log('component render')
         const genreOptions = this.context.genres.length > 0
             ? this.context.genres.map((genre,i) => <option value={genre.genre_title} key={i}>{genre.genre_title}</option>)
             : ''
-        console.log(genreOptions)
         return(
             <div className="edit-video-wrapper">
-                    <header className="edit-video-header-container">
-                        <h1 className="edit-video-title">Edit Video</h1>
-                    </header>
-                    <section className="edit-video-form-container">
-                        <form className="edit-video-form" onSubmit={ e => this.handleUpdate(e)}>
-                            <div>
-                                <label className="name-video-title-label" htmlFor="video-title">Video Title</label>
-                                <input className="name-video-title-input" id="video-title" type="text" defaultValue={this.state.videoTitle} onChange={ (e) => this.handleTitleChange(e)}></input>
-                            </div>
-                            <div>
-                                <label className="name-video-url-label" htmlFor="video-url">Video Url</label>
-                                <input className="name-video-url-input" samesite="none" id="video-url" type="text" defaultValue={this.state.videoUrl} onChange={ (e) => this.handleUrlChange(e)}></input>
-                            </div>
-                            <div>
-                                <label className="name-video-description-label" htmlFor="video-description">Video Description</label>
-                                <textarea className="name-video-description-input" id="video-description" defaultValue={this.state.videoDescription} onChange={ (e) => this.handleDescriptionChange(e)}></textarea>
-                            </div>
-                            <div>
-                                <label htmlFor="video-rating">Video Rating (Scale 1-5)</label>
-                                <select value={this.state.videoRating} id="video-rating" onChange={ (e) => this.handleRatingChange(e)} >
-                                    <option value={1}>1</option>
-                                    <option value={2}>2</option>
-                                    <option value={3}>3</option>
-                                    <option value={4}>4</option>
-                                    <option value={5}>5</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor="video-genre">Genre</label>
-                                <select value={this.state.videoGenre} id="video-genre" onChange={ (e) => this.handleGenreChange(e)}>
-                                    <option>Select a genre..</option>
-                                    {genreOptions}
-                                </select>
-                            </div>
+                <header className="edit-video-header-container">
+                    <h1 className="edit-video-title">Edit Video</h1>
+                </header>
+                <section className="edit-video-form-container">
+                    <form className="edit-video-form" onSubmit={ e => this.handleUpdate(e)}>
+                        <div>
+                            <label className="name-video-title-label" htmlFor="video-title">Video Title</label>
+                            <input className="name-video-title-input" id="video-title" type="text" required defaultValue={this.state.videoTitle} onChange={ (e) => this.handleTitleChange(e)}></input>
+                        </div>
+                        <div>
+                            <label className="name-video-url-label" htmlFor="video-url">Video Url</label>
+                            <input className="name-video-url-input" samesite="none" id="video-url" type="text" required defaultValue={this.state.videoUrl} onChange={ (e) => this.handleUrlChange(e)}></input>
+                            <div className="error-message">{this.state.videoUrlErrorMessage ? this.state.videoUrlErrorMessage : ''}</div>
+                        </div>
+                        <div>
+                            <label className="name-video-description-label" htmlFor="video-description">Video Description</label>
+                            <textarea className="name-video-description-input" id="video-description" defaultValue={this.state.videoDescription} onChange={ (e) => this.handleDescriptionChange(e)}></textarea>
+                        </div>
+                        <div>
+                            <label htmlFor="video-rating">Video Rating (Scale 1-5)</label>
+                            <select value={this.state.videoRating} id="video-rating" onChange={ (e) => this.handleRatingChange(e)} >
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                                <option value={3}>3</option>
+                                <option value={4}>4</option>
+                                <option value={5}>5</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="video-genre">Genre</label>
+                            <select value={this.state.videoGenre} id="video-genre" onChange={ (e) => this.handleGenreChange(e)}>
+                                <option>Select a genre..</option>
+                                {genreOptions}
+                            </select>
                             <div className="error-message">{this.state.videoGenreErrorMessage ? this.state.videoGenreErrorMessage : ''}</div>
-                            <div className="edit-video-button-group">
-                                <button type="button" onClick={this.handleCancle}>Cancel</button>
-                                <button type="submit">Update</button>
-                            </div>
-                            <div className="delete-video">
-                                I want to <span className="delete-video-text" onClick={this.handleDelete}>delete</span> this video.
-                            </div>
-                        </form>
-                    </section>
+                        </div>
+                        <div className="edit-video-button-group">
+                            <button type="button" onClick={this.handleCancle}>Cancel</button>
+                            <button type="submit">Update</button>
+                        </div>
+                        <div className="delete-video">
+                            I want to <span className="delete-video-text" onClick={this.handleDelete}>delete</span> this video.
+                        </div>
+                    </form>
+                </section>
             </div>    
         )
     }

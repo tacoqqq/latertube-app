@@ -1,4 +1,28 @@
 footer {
-    background: darkgrey;
-    padding: 0.8%;
+    margin-top: 50px;
+    background: #484848;
+}
+
+.pro-icon img {
+    width: 30px;
+    margin: 10px;
+}
+
+.pro-icon {
+    list-style: none;
+}
+
+.pro-icon-container {
+    display: flex;
+}
+
+.pro-contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pro-contact-p {
+    color: white;
+    font-weight: 600;
 }

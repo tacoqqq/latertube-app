@@ -9,7 +9,7 @@ class VideoList extends Component {
 
     render(){
 
-        const videos = this.props.videos.map((video,i) => <Video {...video} key={i} />)
+        const videos = this.props.videos ? this.props.videos.map((video,i) => <Video {...video} key={i} />) : ''
         return(
             <section className="video-list-wrapper">
                 {videos}

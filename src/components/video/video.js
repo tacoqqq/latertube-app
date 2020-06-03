@@ -9,15 +9,15 @@ class Video extends Component {
     static contextType = LatertubeContext
 
     render(){
-        const genrename = this.context.genres.find(genre => genre.genre_id === this.props.genre_id).genre_title
+        const genrename = this.context.genres.length > 0 ? this.context.genres.find(genre => genre.genre_id === this.props.genre_id).genre_title : ''
         return(
             <div className="video-container">
                 <div className="video-card">
                     <div className="video-thumbnail">
+                        <div className="video-title">{this.props.video_title}</div>
                         <div className="video-cover-photo">
                             <img className="video-thumbnail-img" src={this.props.video_thumbnail_url} alt="video-thumbnail" />
                         </div>
-                        <div className="video-title">{this.props.video_title}</div>
                     </div>
                     <div className="video-card-info-conatiner">
                         <div className="video-genre">Video Genre: {genrename}</div>

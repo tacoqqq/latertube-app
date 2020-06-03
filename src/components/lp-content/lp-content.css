@@ -1,10 +1,30 @@
 
 .lp-main-header {
   padding: 50px 20px;
-  min-height: 80vh;
+  min-height: 85vh;
+  font-family: 'Roboto', sans-serif;
 }
 
-.lp-content-section  h3 {
+.lp-main-header::after {
+  content: "";
+  background-image: url('../../img/header-background.jpeg');
+  background-color: #FAFAFA;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  position: absolute;
+  z-index: -1; 
+}
+
+.lp-main-header h1 {
+  font-size: 48px;
+}
+
+.lp-content-section h3 {
   padding: 20px;
 }
 
@@ -19,8 +39,8 @@
 }
 
 
-.lp-content-section:nth-child(even) {
-  background-color: lightgrey;
+.lp-content-section:nth-child(odd) {
+  background-color: #DC143C;
 }
 
 
@@ -28,15 +48,78 @@ button {
   padding: 10px;
   border-radius: 5px;
   font-size: 18px;
+  background-color: #222222;
+  color: white;
+  border: 1px solid #222222;
+  transition: background-color 0.4s ease, border 0.4s ease;
 }
 
 button:hover {
   cursor: pointer;
-  background-color: grey;
-  color: white;
+  border: 1px solid #484848;
+  background-color: #484848;
+  color: #222222;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+.lp-main p {
+  text-align: left;
+}
+
+.lp-content-section:nth-child(odd) h3 , .lp-content-section:nth-child(odd) p{
+  color: white;
+}
+
+
+.lp-content-section:nth-child(even) h3 , .lp-content-section:nth-child(even) p{
+  color: #222222;
+}
+
+
+@media only screen and (min-width: 780px){
+  .lp-main-header {
+    text-align: left;
+    padding-left: 80px;
+  }
+
+  .header-paragraph {
+    width: 450px;
+  }
+
+  .lp-intro-boxes {
+    display: flex;
+  }
+
+  .lp-intro-boxes > div {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+  .lp-intro-boxes > div:nth-child(1){
+    order: 1;
+    background-color: #FAFAFA !important;
+  }
+
+  .lp-content-section:nth-child(1) h3 , .lp-content-section:nth-child(1) p{
+    color: #222222;
+  }
+
+  .lp-intro-boxes > div:nth-child(2){
+    order: 3;
+  }
+
+  .lp-intro-boxes > div:nth-child(3){
+    order: 2;
+  }
+
+}
+
+@media only screen and (min-width: 1050px) {
+  .lp-main-header::after {
+    background-position: bottom right;
+  }
 }

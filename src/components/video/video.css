@@ -17,13 +17,12 @@
   }
 
   .video-cover-photo {
-    background-color: white;
+    background-color: #DC143C;
     margin-bottom: -6px;
   }
   
   .video-thumbnail-img {
     width: 100%;
-    border-bottom: 1px solid darkgrey;
 }
 
   .video-title {
@@ -31,15 +30,15 @@
     padding: 0.5em;
     font-weight: 800;
     margin: 0;
-    background-color: yellow;
-    color: black;
+    background-color: #DC143C;
+    color: white;
+    letter-spacing: 0.5px;
   }
 
 
   .video-card {
     margin: 40px 0;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
     border-radius: 5px;
   }
 
@@ -75,7 +74,7 @@
   div.video-card-info-functions > a:hover {
     background-color: #282828;
     color: white;
-} 
+  } 
 
 @media only screen and (min-width: 768px){
     .video-container {

@@ -17,7 +17,6 @@ class Filter extends Component {
 
     //Submit changes for filtering
     handleSubmitChange = () => {
-        console.log(this.state.newOldSort)
         this.context.filterVideo(this.state.filterTitle, this.state.filterRating, this.state.filterGenre, this.state.newOldSort)
     }
 
@@ -69,23 +68,25 @@ class Filter extends Component {
                 <form className="filter-form">
                     <h3>You have saved <span className="video-count">{videoCounts}</span> LaterTubes.</h3>
                     <h4>Last time you added a video: <span>{startTime}</span></h4>
-                    <div className="filter-condition">
-                        <input id="title-filter" type="text" required placeholder="Search videos by title" value={this.state.filterTitle} onChange={e => this.handleTitleChange(e)}></input>
-                    </div>
-                    <div className="filter-condition">
-                        <select id="rating-filter" onChange={e => this.handleRatingChange(e)}>
-                            <option value={1}>&#9733; &#38; UP</option>
-                            <option value={2}>&#9733;&#9733; &#38; UP</option>
-                            <option value={3}>&#9733;&#9733;&#9733; &#38; UP</option>
-                            <option value={4}>&#9733;&#9733;&#9733;&#9733; &#38; UP</option>
-                            <option value={5}>&#9733;&#9733;&#9733;&#9733;&#9733;</option>
-                        </select>   
-                    </div>
-                    <div className="filter-condition">
-                        <select id="genre-filter" onChange={e => this.handleGenreChange(e)}>
-                            <option value="all videos">All Videos</option>
-                            {genreOptions}
-                        </select>
+                    <div className="filter-condition-wrapper">
+                        <div className="filter-condition title">
+                            <input id="title-filter" type="text" required placeholder="Search videos by title" value={this.state.filterTitle} onChange={e => this.handleTitleChange(e)}></input>
+                        </div>
+                        <div className="filter-condition">
+                            <select id="rating-filter" onChange={e => this.handleRatingChange(e)}>
+                                <option value={1}>&#9733; &#38; UP</option>
+                                <option value={2}>&#9733;&#9733; &#38; UP</option>
+                                <option value={3}>&#9733;&#9733;&#9733; &#38; UP</option>
+                                <option value={4}>&#9733;&#9733;&#9733;&#9733; &#38; UP</option>
+                                <option value={5}>&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+                            </select>   
+                        </div>
+                        <div className="filter-condition genre">
+                            <select id="genre-filter" onChange={e => this.handleGenreChange(e)}>
+                                <option value="all videos">All Videos</option>
+                                {genreOptions}
+                            </select>
+                        </div>
                     </div>
                     <div className="sort-condition">
                         <label htmlFor="new-old-sort">Sort By</label>

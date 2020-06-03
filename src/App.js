@@ -7,7 +7,6 @@ import AddGenre from './components/add-genre/add-genre';
 import AddVideo from './components/add-video/add-video';
 import EditVideo from './components/edit-video/edit-video';
 import { LatertubeContext } from './latertube-context';
-//import { STORE } from './store';
 import config from '../src/config';
 
 class App extends Component {
@@ -53,11 +52,10 @@ class App extends Component {
       }
     )
 
+    //Move the newly-updated video to the front
     updatedVideos.splice(updatedVideos.indexOf(updateInfo) , 1)
     updatedVideos.unshift(updateInfo)
 
-    console.log('after update done')
-    console.log(updatedVideos)
     this.setState({
       videos: updatedVideos,
       filteredVideos: updatedVideos
@@ -75,11 +73,13 @@ class App extends Component {
 
   //Filter Video
   handleFilterVideo = (keyword, rating, genreId, newOldSort) => {
-    console.log('in handleFilterVideo')
-
+    //filter title
     const videosIncludeKeyword = keyword ? this.state.videos.filter(video => video.video_title.toLowerCase().includes(keyword.toLowerCase())) : this.state.videos
+    //filter rating
     const videosMatchRating = rating ? videosIncludeKeyword.filter(video => Number(video.video_rating) >= Number(rating)) : videosIncludeKeyword
+    //filter genre
     const videosMatchGenre = genreId ? videosMatchRating.filter(video => video.genre_id === genreId ) : videosMatchRating
+    //check if request sorting
     if (Number(newOldSort) === 1){
       this.setState({
         filteredVideos: videosMatchGenre
@@ -89,13 +89,13 @@ class App extends Component {
         filteredVideos: videosMatchGenre.reverse()
       })
     }
-  
 }
 
   componentDidMount(){
     let genresArray = []
     let videosArray = []
 
+    //Fetch genres from API
     fetch(`${config.API_ENDPOINT}/genres`)
       .then(res => {
         if (!res.ok){

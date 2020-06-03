@@ -8,25 +8,18 @@ import { LatertubeContext } from '../../latertube-context';
 class HomeMain extends Component {
     static contextType = LatertubeContext
 
-    /*
-    state = {
-        genres: this.context.genres,
-        videos: this.context.videos || [],
-        filteredVideos: this.context.videos || [],
-    }
-    */
-
     componentDidMount(){
         window.scrollTo(0,0)
     }
-
 
     render(){
         return(
             <div className="home-wrapper">
                 <div className="filter-wrapper">
                     <Filter handleFilter={this.handleFilter} />
-                    <VideoList videos={this.context.filteredVideos}  />
+                    {this.context.filteredVideos.length > 0 
+                        ? <VideoList videos={this.context.filteredVideos} /> 
+                        : <section className="no-result-message">No Result</section>}
                 </div>
             </div>
         )

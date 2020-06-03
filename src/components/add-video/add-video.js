@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './add-video.css'
 import { withRouter } from 'react-router-dom';
 import { LatertubeContext } from '../../latertube-context';
-import actions from '../actions/actions';
+import actions from '../../actions/actions';
 import config from '../../config';
 
 class AddVideo extends Component {
@@ -15,6 +15,7 @@ class AddVideo extends Component {
             videoRating: 1,
             videoGenreId: 'Select a genre..',
             videoGenreErrorMessage: null,
+            videoUrlErrorMessage: null
         }
     }
 
@@ -30,10 +31,20 @@ class AddVideo extends Component {
 
     //Handle Url Change
     handleUrlChange = (event) => {
-        const newUrl = event.target.value
         this.setState({
-            videoUrl: newUrl
+            videoUrlErrorMessage: ''
         })
+        const newUrl = event.target.value
+
+        if (!(/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/).test(newUrl)){
+            this.setState({
+                videoUrlErrorMessage: "Please provide a valid Youtube URL that matches the format of the example!"
+            })
+        } else {
+            this.setState({
+                videoUrl: newUrl
+            })
+        }
     }
 
     //Handle Description Change
@@ -112,7 +123,9 @@ class AddVideo extends Component {
                 this.props.history.push('/home')
             })
             .catch(err => {
-                console.log(err.message)
+                this.setState({
+                    videoGenreErrorMessage: err.message
+                })
             })
     }
 
@@ -121,7 +134,7 @@ class AddVideo extends Component {
         this.props.history.push('/home')
     }
 
-
+    //Users can press the esc key to leave this page and go back to homepage
     componentDidMount(){
         document.addEventListener("keydown", (e) => actions.escFunction(e, this.props.history), false);
     }
@@ -132,9 +145,7 @@ class AddVideo extends Component {
 
 
     render(){
-
         const genreOptions = this.context.genres.map((genre,i) => <option key={i}>{genre.genre_title}</option>)
-
         return(
             <div className="add-video-wrapper">
                     <header className="add-video-header-container">
@@ -149,6 +160,7 @@ class AddVideo extends Component {
                             <div>
                                 <label className="name-video-url-label" htmlFor="video-url">Video Url</label>
                                 <input className="name-video-url-input" samesite="none" id="video-url" type="text" required placeholder="https://www.youtube.com/watch?v=NRlYiTPPo7A" onChange={ (e) => this.handleUrlChange(e)}></input>
+                                <div className="error-message">{this.state.videoUrlErrorMessage ? this.state.videoUrlErrorMessage : ''}</div>
                             </div>
                             <div>
                                 <label className="name-video-description-label" htmlFor="video-description">Video Description</label>
@@ -170,8 +182,8 @@ class AddVideo extends Component {
                                     <option>Select a genre..</option>
                                     {genreOptions}
                                 </select>
+                                <div className="error-message">{this.state.videoGenreErrorMessage ? this.state.videoGenreErrorMessage : ''}</div>
                             </div>
-                            <div className="error-message">{this.state.videoGenreErrorMessage ? this.state.videoGenreErrorMessage : ''}</div>
                             <div className="add-video-button-group">
                                 <button type="button" onClick={this.handleCancle}>Cancel</button>
                                 <button type="submit">Create</button>
@@ -184,4 +196,4 @@ class AddVideo extends Component {
 
 }
 
-export default withRouter(AddVideo)
+export default withRouter(AddVideo);

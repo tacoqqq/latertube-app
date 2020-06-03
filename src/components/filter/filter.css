@@ -1,3 +1,7 @@
+.filter-container{
+    padding: 5px;
+}
+
 .video-count {
     color: red;
     font-weight: 800;
@@ -13,4 +17,38 @@ input, label, select {
 
 select {
     height: 30px;
+}
+
+input, select {
+    height: 35px;
+}
+
+@media only screen and (min-width: 1200px) {
+    .filter-condition-wrapper {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .filter-condition {
+        margin: 5px 8px;
+        flex-basis: 1;
+    }
+
+    .title {
+        flex-basis: 500px;
+    }
+
+    .genre {
+        flex-basis: 300px;
+    }
+
+    #rating-filter {
+        position: relative;
+        top: 2px;
+    }
+    
+    #title-filter {
+        position: relative;
+        bottom: 2px;
+    }
 }
