@@ -16,7 +16,9 @@
     display: inline-block;
     padding: 0 5px;
     position: relative;
-    top: 8px;
+    width: 45px;
+    top: 6px;
+    left: -8px;
   }
 
   div.nav-title a {
@@ -66,12 +68,16 @@
       margin: 2px;
   }
 
+
   @media only screen and (min-width: 450px){
     div.nav-title a {
       display: inline-block;
     }
+    .app-logo {
+      left: 0px;
+      top: 9px;
+    }
   }
-
 
 
   @media only screen and (min-width: 1050px){
