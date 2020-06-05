@@ -17,10 +17,10 @@ class HomeMain extends Component {
             <div className="home-wrapper">
                 <div className="filter-wrapper">
                     <Filter handleFilter={this.handleFilter} />
+                </div>
                     {this.context.filteredVideos.length > 0 
                         ? <VideoList videos={this.context.filteredVideos} /> 
                         : <section className="no-result-message">No Result</section>}
-                </div>
             </div>
         )
     }
