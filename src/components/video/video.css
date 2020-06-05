@@ -18,12 +18,39 @@
 
   .video-cover-photo {
     background-color: #DC143C;
-    margin-bottom: -6px;
+    position: relative;
+    overflow: hidden;
+
   }
   
   .video-thumbnail-img {
     width: 100%;
+    position: relative;
 }
+
+
+  .video-cover-photo::before {
+    width: 100%;
+    height: 12%;
+    display: block;
+    content: '';
+    background-color: #222222;
+    position: absolute;
+    top: 0px;
+    z-index: 1;
+    opacity: 0.5;
+  }
+
+
+  .video-cover-photo::after {
+    width: 100%;
+    height: 15%;
+    display: block;
+    content: '';
+    background-color: #DC143C;
+    position: absolute;
+    bottom: 0px;
+  }
 
   .video-title {
     text-align: left;
@@ -103,6 +130,7 @@
         display: flex;
         flex-direction: column;
     }
+
 }
 
 
